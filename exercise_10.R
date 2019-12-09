@@ -13,7 +13,7 @@ rM <- 0.1
 N0 <- 1
 M0 <- 0
 
-timesteps <- 500
+timesteps <- 360
 count <- 0
 Npop <- numeric(length=1000)
 Npop[1] <- N0
@@ -34,16 +34,15 @@ for (t in 1:timesteps){
 }
 
 # Drug is introduced at t=501
-# The daily rate at which N-cells decrease after drug treatment was changed from
-# -0.1 to -1.0 because (Npop[t]+Mpop[t])/K was too small to show significant
-# decline, even after 1000000 time units.
 rMd <- 0.05
-rNd <- 1.0
-for (t in 501:999){
-  Npop[t+1] <- (Npop[t]-rNd*Npop[t]*(1-(Npop[t]+Mpop[t])/K))
-  Mpop[t+1] <- (Mpop[t]+rMd*Mpop[t]*(1-(Npop[t]+Mpop[t])/K))
+rNd <- 0.1
+for (t in 361:999){
+  Npop[t+1] <- Npop[t]-rNd*Npop[t]*(1-((Npop[t]+Mpop[t])/K))
+  Mpop[t+1] <- Mpop[t]+rMd*Mpop[t]*(1-((Npop[t]+Mpop[t])/K))
 }
 
 timeaxis=as.numeric(1:1000)
 
-plot(timeaxis, Npop, type="l", xlab="time", ylab="population", main="Tumor Cell Populations vs. Time")+lines(timeaxis,Mpop, type="l", col="blue")+legend(175,4e+05,legend=c("Susceptible cells", "Resistent cells"), col=c("black","blue"), lty=1:1, cex=0.8)
+plot(timeaxis, Npop, type="l", xlab="Time", ylab="Population", main="Tumor Cell Populations vs. Time")
+lines(timeaxis,Mpop, type="l", col="blue")
+legend(175,4e+05,legend=c("Susceptible cells", "Resistent cells"), col=c("black","blue"), lty=1:1, cex=0.8)
